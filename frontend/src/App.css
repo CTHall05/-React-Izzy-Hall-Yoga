@@ -1,6 +1,12 @@
+:root {
+  --primary-colour: #73A580;
+  --secondary-colour: #E1AD01;
+  --font-colour: white;
+}
+
 .App {
   text-align: center;
-  background-color: aliceblue;
+  color: var(--font-colour);
 }
 
 .App-logo {
@@ -15,7 +21,7 @@
 }
 
 .App-header {
-  background-color: #282c34;
+  background-color: var(--secondary-colour);
   min-height: 15vh;
   display: flex;
   flex-direction: column;
@@ -40,7 +46,7 @@
 
 .form-div {
   display: flex;
-  background-color: #61dafb;
+  background-color: var(--primary-colour);
   justify-content: center;
 }
 
@@ -50,7 +56,26 @@
   justify-content: center;
   align-items: center;
   height: 85vh;
-  gap:  10px;
+  gap: 10px;
+}
+
+.form-container input {
+  width: 200px;
+  height: 25px;
+  border-radius: 5px;
+  padding-left:7.5px;
+}
+
+.form-container label {
+  font-weight: bold;
+  font-size: large;
+}
+
+.form-container button {
+  width: 210px;
+  height: 30px;
+  border-radius: 5px;
+  cursor: pointer;
 }
 
 
