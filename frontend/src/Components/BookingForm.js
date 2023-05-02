@@ -5,14 +5,23 @@ import '../App.css';
 function BookingForm() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
-  const [classType, setClassType] = useState('');
-  const [dateTime, setDateTime] = useState('');
+  const [selectedDate, setSelectedDate] = useState('');
+  const [classTime, setClassTime] = useState('');
   const [bookingConfirmed, setBookingConfirmed] = useState(false);
+
+  const handleDateChange = (event) => {
+    setSelectedDate(event.target.value);
+    if (new Date(event.target.value).getDay() === 2) {
+      setClassTime('18:00pm');
+    } else if (new Date(event.target.value).getDay() === 3) {
+      setClassTime('10:00am');
+    }
+  };
 
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    const formData = { name, email, classType, dateTime };
+    const formData = { name, email, classTime, selectedDate };
 
     axios.post('/api/bookings', formData)
       .then(() => {
@@ -22,6 +31,11 @@ function BookingForm() {
         console.error(error);
       });
   };
+
+  const nextTuesday = new Date();
+  nextTuesday.setDate(nextTuesday.getDate() + ((2 + 7 - nextTuesday.getDay()) % 7));
+  const nextWednesday = new Date();
+  nextWednesday.setDate(nextWednesday.getDate() + ((3 + 7 - nextWednesday.getDay()) % 7));
 
   return (
     <div className='form-div'>
@@ -45,20 +59,22 @@ function BookingForm() {
             onChange={(event) => setEmail(event.target.value)}
           />
 
-          <label htmlFor="classType">Class Type:</label>
+          <label htmlFor="selectedDate">Select a Date:</label>
           <input
-            id="classType"
-            type="text"
-            value={classType}
-            onChange={(event) => setClassType(event.target.value)}
+            id="selectedDate"
+            type="date"
+            min={nextTuesday.toISOString().slice(0, 10)}
+            max={nextWednesday.toISOString().slice(0, 10)}
+            value={selectedDate}
+            onChange={handleDateChange}
           />
 
-          <label htmlFor="dateTime">Date and Time:</label>
+          <label htmlFor="classTime">Class Time:</label>
           <input
-            id="dateTime"
-            type="datetime-local"
-            value={dateTime}
-            onChange={(event) => setDateTime(event.target.value)}
+            id="classTime"
+            type="text"
+            value={classTime}
+            readOnly
           />
 
           <button type="submit">Book Class</button>
