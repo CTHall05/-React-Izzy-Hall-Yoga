@@ -45,6 +45,13 @@ function BookingForm() {
         });
     }, 2000); // Delay for 2 seconds before making the fetch request
   };
+  
+  const handleAddToCalendar = () => {
+    // Logic to add the booked class to the user's calendar
+    // You can use a library or API for this functionality
+    // For example, you can use the Google Calendar API or a third-party library like react-calendar
+    console.log('Add to calendar functionality');
+  };
 
   const nextTuesday = new Date();
   nextTuesday.setDate(nextTuesday.getDate() + ((2 + 7 - nextTuesday.getDay()) % 7));
@@ -57,6 +64,7 @@ function BookingForm() {
         <section className='bookingConfirmedMessage fade-in'>
           <p>Your booking has been confirmed. Thank you!</p><br/>
           <p>Your class is at {classTime} on Teusday the {selectedDate}</p>
+          <button onClick={handleAddToCalendar}>Add to Calendar</button>
         </section>
       ) : (
         <>
