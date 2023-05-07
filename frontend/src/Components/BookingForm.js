@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import '../App.css';
 
 function BookingForm() {
@@ -23,7 +22,13 @@ function BookingForm() {
 
     const formData = { name, email, classTime, selectedDate };
 
-    axios.post('/api/bookings', formData)
+    fetch('http://localhost:5000/api/bookings', {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(formData)
+    })
       .then(() => {
         setBookingConfirmed(true);
       })
