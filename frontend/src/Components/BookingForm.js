@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import SunImage from '../Images/sun.jpg';
 import '../App.css';
 
 function BookingForm() {
@@ -7,6 +8,7 @@ function BookingForm() {
   const [selectedDate, setSelectedDate] = useState('');
   const [classTime, setClassTime] = useState('');
   const [bookingConfirmed, setBookingConfirmed] = useState(false);
+  const [isLoading, setLoading] = useState(false); // New state variable
 
   const handleDateChange = (event) => {
     setSelectedDate(event.target.value);
@@ -22,19 +24,26 @@ function BookingForm() {
 
     const formData = { name, email, classTime, selectedDate };
 
-    fetch('http://localhost:5000/api/bookings', {
-      method: 'POST',
-      headers: {
+    setLoading(true); // Start the loading state
+
+    // Introduce a delay using setTimeout
+    setTimeout(() => {
+      fetch('http://localhost:5000/api/bookings', {
+        method: 'POST',
+        headers: {
           'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(formData)
-    })
-      .then(() => {
-        setBookingConfirmed(true);
+        },
+        body: JSON.stringify(formData)
       })
-      .catch((error) => {
-        console.error(error);
-      });
+        .then(() => {
+          setLoading(false); // Stop the loading state
+          setBookingConfirmed(true);
+        })
+        .catch((error) => {
+          console.error(error);
+          setLoading(false); // Stop the loading state
+        });
+    }, 2000); // Delay for 2 seconds before making the fetch request
   };
 
   const nextTuesday = new Date();
@@ -45,45 +54,57 @@ function BookingForm() {
   return (
     <div className='form-div'>
       {bookingConfirmed ? (
-        <p>Your booking has been confirmed. Thank you!</p>
+        <section className='bookingConfirmedMessage fade-in'>
+          <p>Your booking has been confirmed. Thank you!</p><br/>
+          <p>Your class is at {classTime} on Teusday the {selectedDate}</p>
+        </section>
       ) : (
-        <form className="form-container " onSubmit={handleSubmit}>
-          <label htmlFor="name">Name:</label>
-          <input
-            id="name"
-            type="text"
-            value={name}
-            onChange={(event) => setName(event.target.value)}
-          />
+        <>
+          <form className={`form-container ${isLoading ? 'fade-out' : ''}`} onSubmit={handleSubmit}>
+            <label htmlFor="name">Name:</label>
+            <input
+              id="name"
+              type="text"
+              value={name}
+              onChange={(event) => setName(event.target.value)}
+            />
 
-          <label htmlFor="email">Email:</label>
-          <input
-            id="email"
-            type="email"
-            value={email}
-            onChange={(event) => setEmail(event.target.value)}
-          />
+            <label htmlFor="email">Email:</label>
+            <input
+              id="email"
+              type="email"
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
+            />
 
-          <label htmlFor="selectedDate">Select a Date:</label>
-          <input
-            id="selectedDate"
-            type="date"
-            min={nextTuesday.toISOString().slice(0, 10)}
-            max={nextWednesday.toISOString().slice(0, 10)}
-            value={selectedDate}
-            onChange={handleDateChange}
-          />
+            <label htmlFor="selectedDate">Select a Date:</label>
+            <input
+              id="selectedDate"
+              type="date"
+              min={nextTuesday.toISOString().slice(0, 10)}
+              max={nextWednesday.toISOString().slice(0, 10)}
+              value={selectedDate}
+              onChange={handleDateChange}
+            />
 
-          <label htmlFor="classTime">Class Time:</label>
-          <input
-            id="classTime"
-            type="text"
-            value={classTime}
-            readOnly
-          />
+            <label htmlFor="classTime">Class Time:</label>
+            <input
+              id="classTime"
+              type="text"
+              value={classTime}
+              readOnly
+            />
 
-          <button type="submit">Book Class</button>
-        </form>
+            <button type="submit" onClick={() => setLoading(true)}>Book Class</button>
+          </form>
+          {isLoading && (
+            <div className="loading-overlay active">
+              <div className="loading-spinner">
+                <img src={SunImage} alt="Sun" className="rotate-slowly" />
+              </div>
+            </div>
+          )}
+        </>
       )}
     </div>
   );
