@@ -1,12 +1,20 @@
 :root {
-  --primary-colour: #73A580;
+  --primary-colour: #b2bf9c;
   --secondary-colour: #E1AD01;
   --font-colour: white;
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html {
+  overflow: hidden;
 }
 
 .App {
   text-align: center;
   color: var(--font-colour);
+  overflow: hidden;
 }
 
 .App-logo {
@@ -21,14 +29,19 @@
 }
 
 .App-header {
-  background-color: var(--secondary-colour);
-  min-height: 15vh;
+  background-color: var(--primary-colour);
+  min-height: 20vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
+}
+
+.Logo-Image {
+  max-height: 400px;
+  max-width: 350px;
 }
 
 .App-link {
@@ -48,14 +61,16 @@
   display: flex;
   background-color: var(--primary-colour);
   justify-content: center;
+  height: 50vh; 
 }
+
 
 .form-container {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  /* justify-content: center; */
   align-items: center;
-  height: 85vh;
+
   gap: 10px;
   opacity: 1;
 }
@@ -147,7 +162,7 @@
   display: flex;
   align-items: center;
   flex-direction: column;
-  justify-content: center;
+  /* justify-content: center; */
   padding: 20px;
   height: 100vh;
 }
