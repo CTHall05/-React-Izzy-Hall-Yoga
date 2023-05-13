@@ -21,6 +21,9 @@ setInterval(() => {
   }
 }, 24 * 60 * 60 * 1000); // Check once every 24 hours
 
+app.get('/', (req, res) => {
+  res.send('Server is running');
+});
 
 app.post('/api/bookings', (req, res) => {
   const { name, email, classTime, selectedDate } = req.body;
