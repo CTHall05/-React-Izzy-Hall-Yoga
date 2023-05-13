@@ -1,12 +1,20 @@
 :root {
-  --primary-colour: #73A580;
-  --secondary-colour: #E1AD01;
+  --primary-colour: #b2bf9c;
+  --secondary-colour: #FFFB00;
   --font-colour: white;
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html {
+  overflow: hidden;
 }
 
 .App {
   text-align: center;
   color: var(--font-colour);
+  overflow: hidden;
 }
 
 .App-logo {
@@ -21,14 +29,19 @@
 }
 
 .App-header {
-  background-color: var(--secondary-colour);
-  min-height: 15vh;
+  background-color: var(--primary-colour);
+  min-height: 20vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
+}
+
+.Logo-Image {
+  max-height: 400px;
+  max-width: 350px;
 }
 
 .App-link {
@@ -48,15 +61,23 @@
   display: flex;
   background-color: var(--primary-colour);
   justify-content: center;
+  height: 50vh; 
 }
+
 
 .form-container {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  /* justify-content: center; */
   align-items: center;
-  height: 85vh;
+
   gap: 10px;
+  opacity: 1;
+}
+
+.form-container.fade-out {
+  opacity: 0;
+  transition: opacity 2.0s ease-in-out;
 }
 
 .form-container input {
@@ -78,4 +99,78 @@
   cursor: pointer;
 }
 
+.form-container button:hover {
+  background-color: var(--secondary-colour);
+}
 
+/* Loading Booking CSS */
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 3.0s ease-in-out, visibility 0s linear 0.3s;
+}
+
+.loading-overlay.active {
+  opacity: 1;
+  visibility: visible;
+  transition-delay: 3s;
+}
+
+.loading-spinner {
+  display: inline-block;
+  animation: spin 3s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.fade-out {
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.loading-screen img {
+  width: 200px;
+  border-radius: 50%;
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.rotate-slowly {
+  animation: rotate 20s linear infinite; /* Adjust the animation duration and timing as needed */
+}
+
+.bookingConfirmedMessage {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  /* justify-content: center; */
+  padding: 20px;
+  height: 100vh;
+}
+
+.fade-in {
+  opacity: 1;
+  transition: opacity 2.0s ease-in-out;
+}

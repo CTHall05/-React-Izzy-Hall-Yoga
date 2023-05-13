@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect} from 'react';
+import SunImage from '../Images/sun.jpg';
 import '../App.css';
 
 function BookingForm() {
@@ -7,6 +8,24 @@ function BookingForm() {
   const [selectedDate, setSelectedDate] = useState('');
   const [classTime, setClassTime] = useState('');
   const [bookingConfirmed, setBookingConfirmed] = useState(false);
+  const [isLoading, setLoading] = useState(false); // New state variable
+
+  const [bookingCount, setBookingCount] = useState(0); // Booking Count Variable;
+
+  useEffect(() => {
+    // Fetch the booking count for the selected class date
+    const fetchBookingCount = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/api/bookings/count');
+        const data = await response.json();
+        setBookingCount(data.count);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchBookingCount();
+  }, [selectedDate]);
 
   const handleDateChange = (event) => {
     setSelectedDate(event.target.value);
@@ -19,74 +38,115 @@ function BookingForm() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-
+  
+    // Validate form fields
+    if (!name || !email || !selectedDate) {
+      // Display an alert message indicating missing fields
+      alert('Please fill in all required fields');
+      return;
+    }
+  
+    if (bookingCount >= 10) {
+      // Display a message indicating that the class is fully booked
+      return console.log(bookingCount);
+    }
+  
     const formData = { name, email, classTime, selectedDate };
-
-    fetch('http://localhost:5000/api/bookings', {
-      method: 'POST',
-      headers: {
+  
+    setLoading(true); // Start the loading state
+  
+    // Introduce a delay using setTimeout
+    setTimeout(() => {
+      fetch('http://localhost:5000/api/bookings', {
+        method: 'POST',
+        headers: {
           'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(formData)
-    })
-      .then(() => {
-        setBookingConfirmed(true);
+        },
+        body: JSON.stringify(formData)
       })
-      .catch((error) => {
-        console.error(error);
-      });
+        .then(() => {
+          setLoading(false); // Stop the loading state
+          setBookingConfirmed(true);
+        })
+        .catch((error) => {
+          console.error(error);
+          setLoading(false); // Stop the loading state
+        });
+    }, 2000); // Delay for 2 seconds before making the fetch request
+  
+    console.log(bookingCount);
+  };
+  
+  
+  const handleAddToCalendar = () => {
+    // Logic to add the booked class to the user's calendar
+    // You can use a library or API for this functionality
+    // For example, you can use the Google Calendar API or a third-party library like react-calendar
+    console.log('Add to calendar functionality');
   };
 
-  const nextTuesday = new Date();
-  nextTuesday.setDate(nextTuesday.getDate() + ((2 + 7 - nextTuesday.getDay()) % 7));
-  const nextWednesday = new Date();
-  nextWednesday.setDate(nextWednesday.getDate() + ((3 + 7 - nextWednesday.getDay()) % 7));
+  const getNextDayOfWeek = (date, dayOfWeek) => {
+    const resultDate = new Date(date);
+    const currentDayOfWeek = date.getDay();
+    const daysToAdd = dayOfWeek > currentDayOfWeek ? dayOfWeek - currentDayOfWeek : 7 - currentDayOfWeek + dayOfWeek;
+    resultDate.setDate(date.getDate() + daysToAdd);
+    return resultDate;
+  };
+  
+  
+  const nextTuesday = getNextDayOfWeek(new Date(), 2);
+  const nextWednesday = getNextDayOfWeek(new Date(), 3);
+  
 
   return (
     <div className='form-div'>
       {bookingConfirmed ? (
-        <p>Your booking has been confirmed. Thank you!</p>
+        <section className='bookingConfirmedMessage fade-in'>
+          <h1>Thank you!</h1>
+          <p>Your booking has been confirmed.</p>
+          <p>
+            Your class is at {classTime} on{' '}
+            {selectedDate ? new Date(selectedDate).toLocaleString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' }) : ''}!
+          </p>
+          <h2>Cash on arrival</h2>
+          <button onClick={handleAddToCalendar}>Add to Calendar</button>
+        </section>
       ) : (
-        <form className="form-container " onSubmit={handleSubmit}>
-          <label htmlFor="name">Name:</label>
+        <form className={`form-container ${isLoading ? 'fade-out' : ''}`} onSubmit={handleSubmit}>
+          <label htmlFor='name'>Name:</label>
+          <input id='name' type='text' value={name} onChange={(event) => setName(event.target.value)} />
+  
+          <label htmlFor='email'>Email:</label>
+          <input id='email' type='email' value={email} onChange={(event) => setEmail(event.target.value)} />
+  
+          <label htmlFor='selectedDate'>Select a Date:</label>
           <input
-            id="name"
-            type="text"
-            value={name}
-            onChange={(event) => setName(event.target.value)}
-          />
-
-          <label htmlFor="email">Email:</label>
-          <input
-            id="email"
-            type="email"
-            value={email}
-            onChange={(event) => setEmail(event.target.value)}
-          />
-
-          <label htmlFor="selectedDate">Select a Date:</label>
-          <input
-            id="selectedDate"
-            type="date"
+            id='selectedDate'
+            type='date'
             min={nextTuesday.toISOString().slice(0, 10)}
             max={nextWednesday.toISOString().slice(0, 10)}
             value={selectedDate}
             onChange={handleDateChange}
           />
-
-          <label htmlFor="classTime">Class Time:</label>
-          <input
-            id="classTime"
-            type="text"
-            value={classTime}
-            readOnly
-          />
-
-          <button type="submit">Book Class</button>
+  
+          <label htmlFor='classTime'>Class Time:</label>
+          <input id='classTime' type='text' value={classTime} readOnly />
+  
+          <button type='submit' onClick={() => setLoading(true)}>
+            Book Class
+          </button>
         </form>
+      )}
+      {isLoading && (
+        <div className='loading-overlay active'>
+          <div className='loading-spinner'>
+            <img src={SunImage} alt='Sun' className='rotate-slowly' />
+          </div>
+        </div>
       )}
     </div>
   );
+  
 }
 
 export default BookingForm;
