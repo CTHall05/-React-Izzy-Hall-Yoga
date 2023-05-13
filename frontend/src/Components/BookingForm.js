@@ -16,7 +16,7 @@ function BookingForm() {
     // Fetch the booking count for the selected class date
     const fetchBookingCount = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/bookings/count');
+        const response = await fetch('https://izzy-hall-yoga.onrender.com/api/bookings/count');
         const data = await response.json();
         setBookingCount(data.count);
       } catch (error) {
@@ -57,7 +57,7 @@ function BookingForm() {
   
     // Introduce a delay using setTimeout
     setTimeout(() => {
-      fetch('http://localhost:5000/api/bookings', {
+      fetch('https://izzy-hall-yoga.onrender.com/api/bookings', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
