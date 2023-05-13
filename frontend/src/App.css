@@ -1,6 +1,6 @@
 :root {
   --primary-colour: #b2bf9c;
-  --secondary-colour: #E1AD01;
+  --secondary-colour: #FFFB00;
   --font-colour: white;
   box-sizing: border-box;
   padding: 0;
@@ -99,6 +99,10 @@ html {
   cursor: pointer;
 }
 
+.form-container button:hover {
+  background-color: var(--secondary-colour);
+}
+
 /* Loading Booking CSS */
 .loading-overlay {
   position: fixed;
@@ -109,7 +113,6 @@ html {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: rgba(0, 0, 0, 0.5);
   opacity: 0;
   visibility: hidden;
   transition: opacity 3.0s ease-in-out, visibility 0s linear 0.3s;
