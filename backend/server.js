@@ -21,10 +21,6 @@ setInterval(() => {
   }
 }, 24 * 60 * 60 * 1000); // Check once every 24 hours
 
-app.get('/api/bookings/count', (req, res) => {
-  const bookingCount = tuesdayBookingCount + wednesdayBookingCount;
-  res.json({ count: bookingCount });
-});
 
 app.post('/api/bookings', (req, res) => {
   const { name, email, classTime, selectedDate } = req.body;
@@ -33,7 +29,7 @@ app.post('/api/bookings', (req, res) => {
   if (
     (new Date(selectedDate).getDay() === 2 && tuesdayBookingCount >= 10) ||
     (new Date(selectedDate).getDay() === 3 && wednesdayBookingCount >= 10)
-  ) {
+  ) { 
     res.status(403).json({ message: 'Class fully booked' });
     return;
   }
@@ -94,16 +90,6 @@ app.post('/api/bookings', (req, res) => {
   });
 });
 
-// Add a new route for fetching the booking count
-app.get('/api/bookings/count', (req, res) => {
-  res.json({ count: bookingCount });
-});
-
-const port = 5000;
-app.listen(port, () => {
-  console.log(`Server started on port ${port}`);
-});
-
 // Add new routes for fetching the booking counts for each class day
 app.get('/api/bookings/count/tuesday', (req, res) => {
   res.json({ count: tuesdayBookingCount });
@@ -112,3 +98,10 @@ app.get('/api/bookings/count/tuesday', (req, res) => {
 app.get('/api/bookings/count/wednesday', (req, res) => {
   res.json({ count: wednesdayBookingCount });
 });
+
+const port = 5000;
+app.listen(port, () => {
+  console.log(`Server started on port ${port}`);
+});
+
+
