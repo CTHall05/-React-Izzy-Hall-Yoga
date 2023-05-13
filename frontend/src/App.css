@@ -96,6 +96,7 @@ html {
   width: 210px;
   height: 30px;
   border-radius: 5px;
+  font-family: bold;
   cursor: pointer;
 }
 
