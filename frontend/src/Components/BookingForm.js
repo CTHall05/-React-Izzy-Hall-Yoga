@@ -23,7 +23,7 @@ function BookingForm() {
         console.error(error);
       }
     };
-
+  
     fetchBookingCount();
   }, [selectedDate]);
 
