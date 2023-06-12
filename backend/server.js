@@ -54,13 +54,13 @@ app.post('/api/bookings', (req, res) => {
   const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-      user: 'charlestaylorhall05@gmail.com', // Replace with your Gmail address
+      user: 'izzsabellahall@gmail.com', // Replace with your Gmail address
       pass: process.env.GMAIL_PASSWORD // Replace with your Gmail password or app password if 2-Step Verification is enabled
     }
   });
 
   const userMailOptions = {
-    from: 'charlestaylorhall05@gmail.com',
+    from: 'izzsabellahall@gmail.com',
     to: email,
     subject: 'Booking confirmation',
     text: `Dear ${name},\n\nThank you for booking at ${classTime} on ${selectedDate}.\n\nBest regards,\nIzzy Hall`
@@ -74,8 +74,8 @@ app.post('/api/bookings', (req, res) => {
       console.log('Confirmation email sent:', info.response);
 
       const ownerMailOptions = {
-        from: 'charlestaylorhall05@gmail.com',
-        to: 'charlestaylorhall05@gmail.com', // Replace with the email of the business owner
+        from: 'izzsabellahall@gmail.com',
+        to: 'izzsabellahall@gmail.com', // Replace with the email of the business owner
         subject: 'New Booking',
         text: `A new booking has been made by ${name} (${email}) for ${classTime} on ${selectedDate}.\n\n${bookingCount} people have already booked onto this class.`
       };
